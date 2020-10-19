@@ -1,19 +1,21 @@
+require('rootpath')();
 const express = require('express');
 const app = express();
-const connection = require('./connections/dbConnection');
-const student = require('./routes/student');
-const bodyParser = require('body-parser');
-const parent = require('./routes/parent');
-const teacher = require('./routes/teacher');
-port = 3000;
+const cors = require('cors');
+const bodyParser= require('body-parser');
+const errorHandler = require('_middleware/error-handler')
 
-
-
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
-app.use('/student', student);
-app.use('/parent', parent);
-app.use('/teacher', teacher)
+app.use(cors())
 
+//api routes
+app.use('/student', require('./routes/student/studentController'));
 
-app.listen(port, ()=> console.log("Listening  to Port 3000"));
+//global error handler
+app.use(errorHandler);
+
+//start server
+const port = process.env.NODE === 'production' ? (process.env.PORT || 80): 3000;
+
+app.listen(port, ()=> console.log("Listening  on port " +port));
