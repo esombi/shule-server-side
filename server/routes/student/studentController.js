@@ -11,8 +11,8 @@ router.post('/authenticate', authenticateSchema, authenticate);
 router.get('/', authorize(), getAll);
 router.get('/current', authorize(), getCurrent);
 router.get('/:id', authorize(), getById);
-//router.put('/:id', authorize(), updateSchema, update);
-//router.delete('/:id', authorize(), _delete);
+router.put('/:id', authorize(), updateSchema, update);
+router.delete('/:id', authorize(), _delete);
 
 module.exports = router;
 
@@ -66,3 +66,26 @@ function registerSchema(req, res, next) {
             .then(user => res.json(user))
             .catch(next);
     }
+
+    function updateSchema(req, res, next) {
+        const schema = Joi.object({
+            firstName: Joi.string().empty(''),
+            lastName: Joi.string().empty(''),
+            username: Joi.string().empty(''),
+            password: Joi.string().min(6).empty('')
+        });
+        validateRequest(req, next, schema);
+    }
+
+    function update(req, res, next) {
+        studentService.update(req.params.id, req.body)
+            .then(user => res.json(user))
+            .catch(next);
+    }    
+
+    function _delete(req, res, next) {
+        studentService.delete(req.params.id)
+            .then(() => res.json({ message: 'Student deleted successfully' }))
+            .catch(next);
+    }
+    

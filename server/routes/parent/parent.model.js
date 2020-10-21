@@ -4,19 +4,14 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
+        P_ID:{ type: DataTypes.STRING, allowNull: false},
         firstName: { type: DataTypes.STRING, allowNull: false },
         lastName: { type: DataTypes.STRING, allowNull: false },
-        otherName: { type: DataTypes.STRING, allowNull: false },
         email: { type: DataTypes.STRING, allowNull: true},
-        address: { type: DataTypes.STRING, allowNull: false },
-        dob: { type: DataTypes.DATEONLY, allowNull: false },
-        admissionYear: { type: DataTypes.STRING, allowNull: false },
         phone_No: { type: DataTypes.STRING, allowNull: false },
-        class: { type: DataTypes.STRING, allowNull: false },
         username: { type: DataTypes.STRING, allowNull: false },
         hash: { type: DataTypes.STRING, allowNull: false } 
     };
-
     const options = {
         defaultScope: {
             //exclude hash by default
@@ -27,5 +22,6 @@ function model(sequelize) {
             withHash: { attributes: {}, }
         }
     };
-    return sequelize.define('students', attributes, options);
+    return sequelize.define('parent', attributes, options);
 }
+ 

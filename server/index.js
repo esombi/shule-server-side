@@ -11,6 +11,8 @@ app.use(cors())
 
 //api routes
 app.use('/student', require('./routes/student/studentController'));
+app.use('/teacher', require('./routes/teacher/teacherController'));
+app.use('/parent', require('./routes/parent/parentController'));
 
 //global error handler
 app.use(errorHandler);

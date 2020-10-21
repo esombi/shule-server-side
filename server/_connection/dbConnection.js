@@ -2,7 +2,11 @@ const config = require('dbConfig.json');
 const mysql = require('mysql2/promise');
 const { Sequelize } = require('sequelize');
 
-module.exports = db = {};
+module.exports = db = {
+    students: this.students,
+    teachers: this.teachers,
+    parents: this.parents
+};
 
 initialize();
 
@@ -16,7 +20,11 @@ async function initialize() {
     const sequelize = new Sequelize(database, user, password, { dialect: 'mysql' });
 
     //init models and add them to the exported db object
-    db.students = require('../routes/student/student.model')(sequelize);
+     db.students =  require('../routes/student/student.model')(sequelize);
+     db.parents = require('../routes/parent/parent.model')(sequelize);
+     db.teachers =  require('../routes/teacher/teacher.model')(sequelize);
+    
+     
 
     // sync all models with database
     await sequelize.sync();

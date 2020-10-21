@@ -1,7 +1,8 @@
 const config = require('dbConfig.json');
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs');
 const db = require('_connection/dbConnection');
+
 
 module.exports = {
     authenticate,
@@ -9,11 +10,11 @@ module.exports = {
     getById,
     create,
     update,
-    delete: _delete
+    delete:_delete
+}
 
-};
 async function authenticate({ username, password }) {
-    const user = await db.students.scope('withHash').findOne({ where: { username } });
+    const user = await db.parents.scope('withHash').findOne({ where: { username } });
 
     if (!user || !(await bcrypt.compare(password, user.hash)))
         throw 'Username or password is incorrect';
@@ -22,9 +23,8 @@ async function authenticate({ username, password }) {
     const token = jwt.sign({ sub: user.id }, config.secret, { expiresIn: '7d' });
     return { ...omitHash(user.get()), token };
 }
-
 async function getAll() {
-    return await db.students.findAll();
+    return await db.parents.findAll();
 }
 
 async function getById(id) {
@@ -32,18 +32,18 @@ async function getById(id) {
 }
 
 async function create(params) {
-    // validate
-    if (await db.students.findOne({ where: { username: params.username } })) {
+    //validate
+    if(await db.parents.findOne({ where: { username: params.username } })){
         throw 'Username "' + params.username + '" is already taken';
     }
 
-    // hash password
-    if (params.password) {
+    //hash password
+    if(params.password){
         params.hash = await bcrypt.hash(params.password, 10);
     }
 
-    // save user
-    await db.students.create(params);
+    //save user
+    await db.parents.create(params);
 }
 
 async function update(id, params) {
@@ -51,7 +51,7 @@ async function update(id, params) {
 
     // validate
     const usernameChanged = params.username && user.username !== params.username;
-    if (usernameChanged && await db.students.findOne({ where: { username: params.username } })) {
+    if (usernameChanged && await db.parents.findOne({ where: { username: params.username } })) {
         throw 'Username "' + params.username + '" is already taken';
     }
 
@@ -72,10 +72,9 @@ async function _delete(id) {
     await user.destroy();
 }
 
-
 // helper functions
 async function getUser(id) {
-    const user = await db.students.findByPk(id);
+    const user = await db.parents.findByPk(id);
     if (!user) throw 'User not found';
     return user;
 }
