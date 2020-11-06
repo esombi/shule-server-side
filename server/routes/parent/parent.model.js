@@ -4,7 +4,7 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
-        P_ID:{ type: DataTypes.STRING, allowNull: false},
+        //P_ID:{ type: DataTypes.STRING, allowNull: false},
         firstName: { type: DataTypes.STRING, allowNull: false },
         lastName: { type: DataTypes.STRING, allowNull: false },
         email: { type: DataTypes.STRING, allowNull: true},
@@ -22,6 +22,6 @@ function model(sequelize) {
             withHash: { attributes: {}, }
         }
     };
-    return sequelize.define('parent', attributes, options);
+    return sequelize.define('parent', attributes, options); 
 }
  

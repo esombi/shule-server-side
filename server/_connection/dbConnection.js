@@ -23,8 +23,24 @@ async function initialize() {
      db.students =  require('../routes/student/student.model')(sequelize);
      db.parents = require('../routes/parent/parent.model')(sequelize);
      db.teachers =  require('../routes/teacher/teacher.model')(sequelize);
+     db.courses = require('../routes/courses/courses.model')(sequelize);
+     db.assignment = require('../routes/assignment/assig.model')(sequelize);
     
-     
+    //Relations
+    db.parents.belongsTo(db.students);
+    db.students.hasOne(db.parents);
+    db.courses.belongsTo(db.students);
+    db.students.hasMany(db.courses);
+    db.courses.belongsTo(db.teachers);
+    db.teachers.hasMany(db.courses);
+
+        //assignment
+        db.assignment.belongsTo(db.teachers);
+        db.teachers.hasMany(db.assignment);
+        db.assignment.belongsTo(db.parents);
+        db.parents.hasMany(db.assignment);
+        db.assignment.belongsTo(db.students);
+        db.students.hasMany(db.assignment);
 
     // sync all models with database
     await sequelize.sync();

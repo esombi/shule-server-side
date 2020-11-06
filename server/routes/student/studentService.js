@@ -75,7 +75,16 @@ async function _delete(id) {
 
 // helper functions
 async function getUser(id) {
-    const user = await db.students.findByPk(id);
+    const user = await db.students.findByPk(id,
+        {
+            include: [
+                {
+                    model : db.courses,
+                    attributes: ['courses', 'teacherId']
+                }
+                ]         
+        }
+    );
     if (!user) throw 'User not found';
     return user;
 }

@@ -4,7 +4,6 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
-        teacher_ID:{ type: DataTypes.STRING, allowNull: false},
         firstName: { type: DataTypes.STRING, allowNull: false },
         lastName: { type: DataTypes.STRING, allowNull: false },
         class_assigned: { type: DataTypes.STRING, allowNull: false },
@@ -26,4 +25,4 @@ function model(sequelize) {
         }
     };
     return sequelize.define('teacher', attributes, options);
-}
+} 

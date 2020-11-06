@@ -9,7 +9,8 @@ module.exports = {
     getById,
     create,
     update,
-    delete:_delete
+    delete:_delete,
+    getCourse
 }
 
 async function authenticate({ username, password }) {
@@ -80,4 +81,27 @@ async function getUser(id) {
 function omitHash(user) {
     const { hash, ...userWithoutHash } = user;
     return userWithoutHash;
+}
+
+async function getCourse(id, params) {
+    const user = await getUserCourse(id);
+
+    // copy params to user and save
+    Object.assign(user, params);
+    await user.save();
+
+    return omitHash(user.get());
+}
+
+async function getUserCourse(id) {
+    const user = await db.courses.findByPk(id, {
+        include: [
+            {
+                model : db.students,
+                attributes: ['firstName', 'lastName' ]
+            }
+            ]        
+    });
+    if (!user) throw 'User not found';
+    return user;
 }

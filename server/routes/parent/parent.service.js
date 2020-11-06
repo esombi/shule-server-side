@@ -24,7 +24,14 @@ async function authenticate({ username, password }) {
     return { ...omitHash(user.get()), token };
 }
 async function getAll() {
-    return await db.parents.findAll();
+    return await db.parents.findAll({
+        include: [
+            {
+                model : db.students,
+                attributes: ['firstName', 'lastName', 'class']
+            }
+        ]
+    });
 }
 
 async function getById(id) {
@@ -43,11 +50,15 @@ async function create(params) {
     }
 
     //save user
+    const stud =  await db.students === params.studentId;
+    if(stud && await db.students.findOne({ where: {id: params.studentId }})){
+        throw  params.studentId + " is unavailable";
+    }
     await db.parents.create(params);
 }
 
 async function update(id, params) {
-    const user = await getUser(id);
+    const user = await getUser(id); 
 
     // validate
     const usernameChanged = params.username && user.username !== params.username;
@@ -74,10 +85,21 @@ async function _delete(id) {
 
 // helper functions
 async function getUser(id) {
-    const user = await db.parents.findByPk(id);
+    const user = await db.parents.findByPk(id, {
+        include: [
+            {
+                model : db.students,
+                attributes: ['firstName', 'lastName', 'class']
+            }
+        ]
+    });
+
     if (!user) throw 'User not found';
     return user;
 }
+
+
+
 
 function omitHash(user) {
     const { hash, ...userWithoutHash } = user;

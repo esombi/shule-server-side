@@ -5,6 +5,7 @@ const validateRequest = require('_middleware/validate-request');
 const authorize = require('_middleware/authorizeParent');
 const parentService = require('./parent.service');
 
+
 //routes
 router.post('/register', registerSchema, register);
 router.post('/authenticate', authenticateSchema, authenticate);
@@ -30,15 +31,16 @@ function authenticate(req, res, next) {
         .catch(next);
 }
 
-function registerSchema(req, res, next) {
+function registerSchema(req, res, next) { 
     const schema = Joi.object({
-        P_ID: Joi.string().required(),
+       // P_ID: Joi.string().required(),
         firstName: Joi.string().required(),
         lastName: Joi.string().required(),
         email: Joi.string().optional(),
         phone_No:Joi.number().required(),
         username: Joi.string().required(),
-        password: Joi.string().min(6).required()
+        password: Joi.string().min(6).required(),
+        studentId:Joi.number().required()
 
     });
     validateRequest(req, next, schema);
@@ -53,9 +55,8 @@ function getAll(req, res, next) {
         .then(users => res.json(users))
         .catch(next);
 }
-
-function getCurrent(req, res, next) {
-    res.json(req.user);
+ function getCurrent(req, res, next) {
+    res.json (req.user);
 }
 
 function getById(req, res, next) {

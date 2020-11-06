@@ -31,7 +31,6 @@ function authenticate(req, res, next) {
 
 function registerSchema(req, res, next) {
     const schema = Joi.object({
-        teacher_ID: Joi.string().required(),
         firstName: Joi.string().required(),
         lastName: Joi.string().required(),
         class_assigned: Joi.string().required(),
